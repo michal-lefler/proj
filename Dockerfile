@@ -21,7 +21,8 @@ RUN ./mvnw clean package -DskipTests
 EXPOSE 8080
 
 # Set environment variable for dynamic port (Render sets PORT automatically)
-ENV SERVER_PORT=${PORT:-8080}
+#ENV SERVER_PORT=${PORT:-8080}
+ENV SERVER_PORT=8080
 
 # Run the app
 CMD ["java", "-jar", "target/demo-0.0.1-SNAPSHOT.jar"]
