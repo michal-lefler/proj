@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/kids/parents")
+@RequestMapping("/parents")
 public class ParentController {
     private final ParentRepository repo;
 

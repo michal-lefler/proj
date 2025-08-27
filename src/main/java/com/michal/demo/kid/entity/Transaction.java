@@ -1,52 +1,74 @@
 package com.michal.demo.kid.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Transaction {
+    public enum TransactionType {
+        PAYBOX,
+        BIT,
+        LINK
+    }
+
+    public enum TransactionStatus {
+        ACCEPTED,
+        REJECTED
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long kidId;
-    private Long parentId;
-    private String requestType;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "kid_id")
+    private Kid kid;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Parent parent;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private TransactionType transactionType;
+
     private String phoneNumber;
     private Double sum;
     private String link;
     private String message;
-    private String status;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private TransactionStatus status;
+
     private String reason;
 
     public Long getId() {
         return id;
     }
 
-    public Long getKidId() {
-        return kidId;
+    public Kid getKid() {
+        return kid;
     }
 
-    public void setKidId(Long kidId) {
-        this.kidId = kidId;
+    public void setKid(Kid kid) {
+        this.kid = kid;
     }
 
-    public Long getParentId() {
-        return parentId;
+    public Parent getParent() {
+        return parent;
     }
 
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
+    public void setParent(Parent parent) {
+        this.parent = parent;
     }
 
-    public String getRequestType() {
-        return requestType;
+    public TransactionType getRTransactionType() {
+        return transactionType;
     }
 
-    public void setRequestType(String requestType) {
-        this.requestType = requestType;
+    public void setTransactionType(TransactionType transactionType) {
+        this.transactionType = transactionType;
     }
 
     public String getPhoneNumber() {
@@ -81,11 +103,11 @@ public class Transaction {
         this.message = message;
     }
 
-    public String getStatus() {
+    public TransactionStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(TransactionStatus status) {
         this.status = status;
     }
 

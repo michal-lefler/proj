@@ -1,8 +1,8 @@
-version: '3.8'
+version: '3.9'
 
 services:
   proj:
-    image: michallefler/proj:latest
+    image: michallefler/proj:v1
     container_name: proj
     build:
       context: .

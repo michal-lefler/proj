@@ -1,28 +1,62 @@
 package com.michal.demo.kid.controller;
 
 import com.michal.demo.kid.entity.Transaction;
-import com.michal.demo.kid.repository.TransactionRepository;
+import com.michal.demo.kid.service.TransactionService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/kids/requests")
+@RequestMapping("/transactions")
 public class TransactionController {
-    private final TransactionRepository repo;
+    private final TransactionService transactionService;
 
-    public TransactionController(TransactionRepository repo) {
-        this.repo = repo;
+    public TransactionController(TransactionService transactionService) {
+        this.transactionService = transactionService;
     }
 
     @GetMapping
-    public List<Transaction> getAll() {
-        return repo.findAll();
+    public List<TransactionRequest> getAll() {
+        return transactionService.findAll()
+                .stream()
+                .map(tx -> new TransactionRequest(
+                        tx.getId(),
+                        tx.getKid().getId(),
+                        tx.getParent().getId(),
+                        tx.getRTransactionType(),
+                        tx.getPhoneNumber(),
+                        tx.getSum(),
+                        tx.getLink(),
+                        tx.getMessage(),
+                        tx.getStatus(),
+                        tx.getReason()
+                ))
+                .toList();
+    }
+
+    @GetMapping("/{id}")
+    public List<TransactionRequest> getTransactionsByKid(@PathVariable Long id) {
+        return transactionService.findAllByKidId(id)
+                .stream()
+                .map(tx -> new TransactionRequest(
+                        tx.getId(),
+                        tx.getKid().getId(),
+                        tx.getParent().getId(),
+                        tx.getRTransactionType(),
+                        tx.getPhoneNumber(),
+                        tx.getSum(),
+                        tx.getLink(),
+                        tx.getMessage(),
+                        tx.getStatus(),
+                        tx.getReason()
+                ))
+                .toList();
     }
 
     @PostMapping
-    public Transaction create(@RequestBody Transaction transaction) {
-        return repo.save(transaction);
+    public Transaction create(@Valid @RequestBody TransactionRequest dto) {
+
+        return transactionService.createTransaction(dto);
     }
 }
-

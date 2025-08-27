@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @RestController
-@RequestMapping("/kids/kids")
+@RequestMapping("/kids")
 public class KidController {
 
     private final KidRepository kidRepository;
