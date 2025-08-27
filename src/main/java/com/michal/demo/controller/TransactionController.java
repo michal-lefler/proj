@@ -1,7 +1,9 @@
-package com.michal.demo.kid.controller;
+package com.michal.demo.controller;
 
-import com.michal.demo.kid.entity.Transaction;
-import com.michal.demo.kid.service.TransactionService;
+import com.michal.demo.entity.Transaction;
+import com.michal.demo.repository.KidRepository;
+import com.michal.demo.repository.ParentRepository;
+import com.michal.demo.service.TransactionService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +13,15 @@ import java.util.List;
 @RequestMapping("/transactions")
 public class TransactionController {
     private final TransactionService transactionService;
+    private final KidRepository kidRepository;
+    private final ParentRepository parentRepository;
 
-    public TransactionController(TransactionService transactionService) {
+    public TransactionController(TransactionService transactionService,
+                                 KidRepository kidRepository,
+                                 ParentRepository parentRepository) {
         this.transactionService = transactionService;
+         this.kidRepository = kidRepository;
+        this.parentRepository = parentRepository;
     }
 
     @GetMapping
@@ -36,8 +44,8 @@ public class TransactionController {
     }
 
     @GetMapping("/{id}")
-    public List<TransactionRequest> getTransactionsByKid(@PathVariable Long id) {
-        return transactionService.findAllByKidId(id)
+    public List<TransactionRequest> getTransactionsByKidId(@PathVariable Long kidId) {
+        return transactionService.findAllByKidId(kidId)
                 .stream()
                 .map(tx -> new TransactionRequest(
                         tx.getId(),
@@ -56,7 +64,23 @@ public class TransactionController {
 
     @PostMapping
     public Transaction create(@Valid @RequestBody TransactionRequest dto) {
+        var kid = kidRepository.findById(dto.getKidId())
+                .orElseThrow(() -> new IllegalArgumentException("Kid not found"));
 
-        return transactionService.createTransaction(dto);
+        var parent = parentRepository.findById(dto.getParentId())
+                .orElseThrow(() -> new IllegalArgumentException("Parent not found"));
+
+        Transaction tx = new Transaction();
+        tx.setKid(kid);
+        tx.setParent(parent);
+        tx.setSum(dto.getSum());
+        tx.setMessage(dto.getMessage());
+        tx.setTransactionType(dto.getTransactionType());
+        tx.setStatus(Transaction.TransactionStatus.ACCEPTED);
+        tx.setReason(dto.getReason());
+        tx.setLink(dto.getLink());
+        tx.setPhoneNumber(dto.getPhoneNumber());
+
+        return transactionService.createTransaction(tx);
     }
 }

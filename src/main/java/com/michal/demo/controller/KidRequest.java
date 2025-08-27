@@ -1,4 +1,4 @@
-package com.michal.demo.kid.controller;
+package com.michal.demo.controller;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
-package com.michal.demo.kid.controller;
+package com.michal.demo.controller;
 
-import com.michal.demo.kid.entity.Parent;
-import com.michal.demo.kid.repository.ParentRepository;
+import com.michal.demo.entity.Parent;
+import com.michal.demo.repository.ParentRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

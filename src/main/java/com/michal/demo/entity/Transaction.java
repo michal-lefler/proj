@@ -1,4 +1,4 @@
-package com.michal.demo.kid.entity;
+package com.michal.demo.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

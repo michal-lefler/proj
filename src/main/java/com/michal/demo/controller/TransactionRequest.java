@@ -1,6 +1,6 @@
-package com.michal.demo.kid.controller;
+package com.michal.demo.controller;
 
-import com.michal.demo.kid.entity.Transaction;
+import com.michal.demo.entity.Transaction;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
